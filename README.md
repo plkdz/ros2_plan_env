@@ -175,3 +175,7 @@ BinaryInflationLayer binary_inflation_layer_;
 当前 ROS2 版本的 `plan_env` 由 plkdz 重新设计和重写，主要实现包括 `GridMap`、`VoxelGridGeometry`、`BinaryOccupancyLayer` 和 `BinaryInflationLayer`。
 
 本包最早参考 EGO-Planner 中 `plan_env` 模块的规划侧地图接口语义，用于提供局部体素地图、膨胀占据查询和 ESDF-free 局部规划所需的地图访问能力。感谢 EGO-Planner 原始作者 Xin Zhou、Zhepei Wang、Hongkai Ye、Chao Xu、Fei Gao 对该类局部规划框架和开源实现的贡献。
+
+## License
+
+本项目使用 GPL-3.0-only 许可证，详见 [LICENSE](LICENSE)。
