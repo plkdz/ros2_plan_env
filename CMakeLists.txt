@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
+if(POLICY CMP0074)
+  cmake_policy(SET CMP0074 NEW)
+endif()
 project(plan_env)
 
 set(CMAKE_BUILD_TYPE Release)
@@ -18,7 +21,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(PCL REQUIRED)
+find_package(PCL REQUIRED COMPONENTS common)
 
 include_directories(
   include
