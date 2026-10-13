@@ -173,6 +173,7 @@ void GridMap::initMap(const rclcpp::Node::SharedPtr &node)
   getOrDeclareParameter(node_, "grid_map/local_update_half_range_z", mapping_parameters_.map_.local_update_half_range_meters_(2), -1.0);
   getOrDeclareParameter(node_, "grid_map/xy_obstacle_inflation_meters", mapping_parameters_.inflation_.xy_obstacle_inflation_meters_, 0.35);
   getOrDeclareParameter(node_, "grid_map/z_obstacle_inflation_meters", mapping_parameters_.inflation_.z_obstacle_inflation_meters_, 0.35);
+  getOrDeclareParameter(node_, "grid_map/min_published_z_meters", mapping_parameters_.publishing_.min_published_z_meters_, -0.1);
   getOrDeclareParameter(node_, "grid_map/max_published_z_meters", mapping_parameters_.publishing_.max_published_z_meters_, -0.1);
   getOrDeclareParameter(node_, "grid_map/frame_id", mapping_parameters_.map_.frame_id_, std::string("world"));
   getOrDeclareParameter(node_, "grid_map/rolling_map_min_z_meters", mapping_parameters_.map_.rolling_map_min_z_meters_, 1.0);
@@ -513,7 +514,8 @@ void GridMap::publishInflatedOccupancyMap()
 
         Eigen::Vector3d position;
         voxel_grid_geometry_.indexToPositionUnchecked(Eigen::Vector3i(x, y, z), position);
-        if (position(2) > mapping_parameters_.publishing_.max_published_z_meters_)
+        if (position(2) < mapping_parameters_.publishing_.min_published_z_meters_ ||
+            position(2) > mapping_parameters_.publishing_.max_published_z_meters_)
         {
           continue;
         }

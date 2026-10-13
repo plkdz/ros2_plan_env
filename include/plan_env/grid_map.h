@@ -30,6 +30,7 @@ struct InflationParameters
 
 struct OccupancyMapPublishingParameters
 {
+  double min_published_z_meters_; // 发布膨胀占据点云时允许输出的最小 z 坐标，单位为米。
   double max_published_z_meters_; // 发布膨胀占据点云时允许输出的最大 z 坐标，单位为米。
 };
 

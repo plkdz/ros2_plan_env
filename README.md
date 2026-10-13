@@ -148,7 +148,7 @@ BinaryInflationLayer binary_inflation_layer_;
 
 膨胀占据点云发布：
 
-- `grid_map/max_published_z_meters`
+- `grid_map/min_published_z_meters` / `grid_map/max_published_z_meters`：发布膨胀占据点云的 z 坐标下限和上限。
 
 ## 设计注意事项
 
