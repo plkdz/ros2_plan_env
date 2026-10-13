@@ -417,6 +417,28 @@ void GridMap::updatePointCloudLocalBounds(const Eigen::Vector3d &min_position,
   runtime_state_.mapping_status_.has_updated_local_bounds_ = true;
 }
 
+void GridMap::addVirtualFloorToInflatedOccupancy()
+{
+  if (!runtime_state_.mapping_status_.has_updated_local_bounds_)
+  {
+    return;
+  }
+
+  const int floor_index_z = 0;
+  if (voxel_grid_geometry_.getVoxelNum()(2) <= floor_index_z)
+  {
+    return;
+  }
+
+  for (int x = runtime_state_.local_bounds_.min_voxel_index_(0); x <= runtime_state_.local_bounds_.max_voxel_index_(0); ++x)
+  {
+    for (int y = runtime_state_.local_bounds_.min_voxel_index_(1); y <= runtime_state_.local_bounds_.max_voxel_index_(1); ++y)
+    {
+      binary_inflation_layer_.setInflatedOccupancy(voxel_grid_geometry_.addressUnchecked(x, y, floor_index_z), 1);
+    }
+  }
+}
+
 void GridMap::addVirtualCeilingToInflatedOccupancy()
 {
   if (!runtime_state_.mapping_status_.has_updated_local_bounds_)
@@ -457,6 +479,7 @@ void GridMap::pointCloudCallback(const sensor_msgs::msg::PointCloud2::ConstShare
   Eigen::Vector3d max_position;
   updateBinaryOccupancyFromPointCloud(merged_point_cloud, min_position, max_position);
   updatePointCloudLocalBounds(min_position, max_position);
+  addVirtualFloorToInflatedOccupancy();
   addVirtualCeilingToInflatedOccupancy();
 }
 

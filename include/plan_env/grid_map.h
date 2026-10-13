@@ -277,6 +277,13 @@ private:
                                    const Eigen::Vector3d &max_position);
 
   /**
+   * @brief 在当前局部边界范围内向膨胀层添加虚拟地板。
+   * @note 读取 runtime_state_.local_bounds_ 和 voxel_grid_geometry_。
+   * @note 修改 binary_inflation_layer_。
+   */
+  void addVirtualFloorToInflatedOccupancy();
+
+  /**
    * @brief 在当前局部边界范围内向膨胀层添加虚拟天花板。
    * @note 读取 runtime_state_.local_bounds_ 和 voxel_grid_geometry_。
    * @note 修改 binary_inflation_layer_。
