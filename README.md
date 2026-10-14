@@ -138,7 +138,6 @@ BinaryInflationLayer binary_inflation_layer_;
 - `grid_map/local_update_half_range_x`：以当前传感器位置为中心的局部更新 x 方向半边长，单位为米。
 - `grid_map/local_update_half_range_y`：以当前传感器位置为中心的局部更新 y 方向半边长，单位为米。
 - `grid_map/local_update_half_range_z`：以当前传感器位置为中心的局部更新 z 方向半边长，单位为米。
-- `grid_map/rolling_map_min_z_meters`
 - `grid_map/frame_id`
 
 障碍膨胀：
@@ -158,7 +157,7 @@ BinaryInflationLayer binary_inflation_layer_;
 - 物理边长一致不代表覆盖范围一致：A* 搜索窗口通常按搜索起终点中点居中，而 `GridMap` 滚动地图窗口按当前传感器位置移动。
 - 滚动地图移动的是 `min_boundary/max_boundary`，不是地图中心变量。地图中心由当前传感器位置和地图尺寸推导。
 - `getRollingMapMinBoundary()` / `getRollingMapMaxBoundary()` 返回的就是当前 `VoxelGridGeometry` 中已经同步的世界坐标边界，可用于规划侧检查点是否位于当前 rolling map buffer 内。
-- 滚动地图的 x/y 边界随当前传感器位置居中移动；z 方向不是以里程计上下对称，而是固定 `grid_map/rolling_map_min_z_meters` 作为下边界，再加 `grid_map/rolling_map_size_z` 得到上边界。
+- 滚动地图的 x/y/z 边界均随当前传感器位置居中移动；每个方向的边长由对应的 `grid_map/rolling_map_size_*` 参数确定。
 - `grid_map/local_update_half_range_*` 是半边长，不是全边长。实际局部更新边框尺寸是该参数的两倍，中心为当前传感器位置。
 - `isPointWithinCurrentLocalUpdateRange(point)` 是规划侧判断目标点是否仍在当前局部更新方框内的只读接口。它和 `getRollingMapMinBoundary()` / `getRollingMapMaxBoundary()` 的 rolling map buffer 判断不同：前者以当前传感器位置和 `local_update_half_range_*` 为边界，后者以滚动地图物理 buffer 为边界。
 - `hasUpdatedLocalMap()` 是规划侧或手动测试节点的 readiness 判断接口。它要求 `GridMap` 已经收到里程计、收到点云，并完成过一次局部地图边界更新；只收到原始点云不代表膨胀占据层已经可用。

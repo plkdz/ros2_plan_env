@@ -48,7 +48,7 @@ ament_target_dependencies(plan_env
 )
 target_link_libraries(plan_env ${PCL_LIBRARIES})
 
-add_executable(grid_map_standalone_node src/grid_map_standalone_node.cpp)
+add_executable(grid_map_standalone_node src/test/grid_map_standalone_node.cpp)
 ament_target_dependencies(grid_map_standalone_node rclcpp)
 target_link_libraries(grid_map_standalone_node plan_env)
 

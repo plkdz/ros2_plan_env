@@ -18,7 +18,6 @@
 struct MapGeometryParameters
 {
   Eigen::Vector3d local_update_half_range_meters_; // 局部更新范围的半边长，单位为米。
-  double rolling_map_min_z_meters_; // 滚动体素地图 z 方向最小边界，单位为米。
   std::string frame_id_; // 地图点云发布和输入点云期望使用的坐标系名称。
 };
 

@@ -176,12 +176,11 @@ void GridMap::initMap(const rclcpp::Node::SharedPtr &node)
   getOrDeclareParameter(node_, "grid_map/min_published_z_meters", mapping_parameters_.publishing_.min_published_z_meters_, -0.1);
   getOrDeclareParameter(node_, "grid_map/max_published_z_meters", mapping_parameters_.publishing_.max_published_z_meters_, -0.1);
   getOrDeclareParameter(node_, "grid_map/frame_id", mapping_parameters_.map_.frame_id_, std::string("world"));
-  getOrDeclareParameter(node_, "grid_map/rolling_map_min_z_meters", mapping_parameters_.map_.rolling_map_min_z_meters_, 1.0);
 
   const Eigen::Vector3d rolling_map_size_meters(rolling_map_size_x, rolling_map_size_y, rolling_map_size_z);
   const Eigen::Vector3d initial_map_min_boundary(-rolling_map_size_x / 2.0,
                                                  -rolling_map_size_y / 2.0,
-                                                 mapping_parameters_.map_.rolling_map_min_z_meters_);
+                                                 -rolling_map_size_z / 2.0);
 
   voxel_grid_geometry_.initializeFromMapSize(initial_map_min_boundary,
                                              rolling_map_size_meters,
@@ -212,7 +211,7 @@ void GridMap::updateRollingMapBoundaries()
   const Eigen::Vector3d rolling_map_min_boundary(
       runtime_state_.sensor_pose_.sensor_position_(0) - rolling_map_size_meters(0) / 2.0,
       runtime_state_.sensor_pose_.sensor_position_(1) - rolling_map_size_meters(1) / 2.0,
-      mapping_parameters_.map_.rolling_map_min_z_meters_);
+      runtime_state_.sensor_pose_.sensor_position_(2) - rolling_map_size_meters(2) / 2.0);
   voxel_grid_geometry_.setMapBoundariesFromMinBoundary(rolling_map_min_boundary);
 }
 
@@ -407,8 +406,6 @@ void GridMap::updatePointCloudLocalBounds(const Eigen::Vector3d &min_position,
   max_x = std::max(max_x, runtime_state_.sensor_pose_.sensor_position_(0));
   max_y = std::max(max_y, runtime_state_.sensor_pose_.sensor_position_(1));
   max_z = std::max(max_z, runtime_state_.sensor_pose_.sensor_position_(2));
-
-  max_z = std::max(max_z, mapping_parameters_.map_.rolling_map_min_z_meters_);
 
   voxel_grid_geometry_.positionToIndexUnchecked(Eigen::Vector3d(max_x, max_y, max_z), runtime_state_.local_bounds_.max_voxel_index_);
   voxel_grid_geometry_.positionToIndexUnchecked(Eigen::Vector3d(min_x, min_y, min_z), runtime_state_.local_bounds_.min_voxel_index_);
