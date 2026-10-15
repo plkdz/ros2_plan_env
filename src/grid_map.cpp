@@ -173,6 +173,8 @@ void GridMap::initMap(const rclcpp::Node::SharedPtr &node)
   getOrDeclareParameter(node_, "grid_map/local_update_half_range_z", mapping_parameters_.map_.local_update_half_range_meters_(2), -1.0);
   getOrDeclareParameter(node_, "grid_map/xy_obstacle_inflation_meters", mapping_parameters_.inflation_.xy_obstacle_inflation_meters_, 0.35);
   getOrDeclareParameter(node_, "grid_map/z_obstacle_inflation_meters", mapping_parameters_.inflation_.z_obstacle_inflation_meters_, 0.35);
+  getOrDeclareParameter(node_, "grid_map/use_virtual_floor", mapping_parameters_.virtual_boundaries_.use_virtual_floor_, false);
+  getOrDeclareParameter(node_, "grid_map/use_virtual_ceiling", mapping_parameters_.virtual_boundaries_.use_virtual_ceiling_, false);
   getOrDeclareParameter(node_, "grid_map/min_published_z_meters", mapping_parameters_.publishing_.min_published_z_meters_, -0.1);
   getOrDeclareParameter(node_, "grid_map/max_published_z_meters", mapping_parameters_.publishing_.max_published_z_meters_, -0.1);
   getOrDeclareParameter(node_, "grid_map/frame_id", mapping_parameters_.map_.frame_id_, std::string("world"));
@@ -477,8 +479,14 @@ void GridMap::pointCloudCallback(const sensor_msgs::msg::PointCloud2::ConstShare
   Eigen::Vector3d max_position;
   updateBinaryOccupancyFromPointCloud(merged_point_cloud, min_position, max_position);
   updatePointCloudLocalBounds(min_position, max_position);
-  // addVirtualFloorToInflatedOccupancy();
-  // addVirtualCeilingToInflatedOccupancy();
+  if (mapping_parameters_.virtual_boundaries_.use_virtual_floor_)
+  {
+    addVirtualFloorToInflatedOccupancy();
+  }
+  if (mapping_parameters_.virtual_boundaries_.use_virtual_ceiling_)
+  {
+    addVirtualCeilingToInflatedOccupancy();
+  }
 }
 
 void GridMap::publishInflatedOccupancyMap()

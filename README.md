@@ -105,7 +105,7 @@ BinaryInflationLayer binary_inflation_layer_;
 5. `collectUniqueRawOccupiedVoxelsFromPointCloud()` 从点云生成去重后的原始占据体素；合并点云中超出当前局部更新半范围的历史点不会继续写回地图。
 6. `inflateRawOccupiedVoxels()` 对原始占据体素执行 xy/z 分离膨胀。
 7. `updatePointCloudLocalBounds()` 更新本轮局部发布边界。
-8. `addVirtualCeilingToInflatedOccupancy()` 添加虚拟天花板。
+8. 按 `grid_map/use_virtual_floor` 和 `grid_map/use_virtual_ceiling` 分别选择是否添加虚拟地板和天花板。
 9. `publishInflatedOccupancyMap()` 发布最终膨胀占据点云。
 10. `publishMapBoundaryMarkers()` 发布滚动地图边界和局部更新半范围边界。
 
