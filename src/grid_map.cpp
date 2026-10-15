@@ -477,8 +477,8 @@ void GridMap::pointCloudCallback(const sensor_msgs::msg::PointCloud2::ConstShare
   Eigen::Vector3d max_position;
   updateBinaryOccupancyFromPointCloud(merged_point_cloud, min_position, max_position);
   updatePointCloudLocalBounds(min_position, max_position);
-  addVirtualFloorToInflatedOccupancy();
-  addVirtualCeilingToInflatedOccupancy();
+  // addVirtualFloorToInflatedOccupancy();
+  // addVirtualCeilingToInflatedOccupancy();
 }
 
 void GridMap::publishInflatedOccupancyMap()
