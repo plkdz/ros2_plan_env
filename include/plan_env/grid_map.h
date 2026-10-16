@@ -27,10 +27,10 @@ struct InflationParameters
   double z_obstacle_inflation_meters_; // 垂直 z 方向障碍膨胀尺寸，单位为米。
 };
 
-struct VirtualBoundaryParameters
+struct VirtualRollingBoundaryParameters
 {
-  bool use_virtual_floor_; // 是否将滚动地图最低 z 体素标记为占据。
-  bool use_virtual_ceiling_; // 是否将滚动地图最高 z 体素标记为占据。
+  bool use_virtual_rolling_floor_; // 是否将滚动地图最低 z 体素标记为占据。
+  bool use_virtual_rolling_ceiling_; // 是否将滚动地图最高 z 体素标记为占据。
 };
 
 struct OccupancyMapPublishingParameters
@@ -43,7 +43,7 @@ struct MappingParameters
 {
   MapGeometryParameters map_; // 地图几何和局部更新半范围配置。
   InflationParameters inflation_; // 障碍物膨胀配置。
-  VirtualBoundaryParameters virtual_boundaries_; // 虚拟地板和天花板配置。
+  VirtualRollingBoundaryParameters virtual_rolling_boundaries_; // 滚动地图虚拟地板和天花板配置。
   OccupancyMapPublishingParameters publishing_; // 膨胀占据点云发布配置。
 };
 
@@ -288,19 +288,19 @@ private:
    * @note 读取 runtime_state_.local_bounds_ 和 voxel_grid_geometry_。
    * @note 修改 binary_inflation_layer_。
    */
-  void addVirtualFloorToInflatedOccupancy();
+  void addVirtualRollingFloorToInflatedOccupancy();
 
   /**
    * @brief 在当前局部边界范围内向膨胀层添加虚拟天花板。
    * @note 读取 runtime_state_.local_bounds_ 和 voxel_grid_geometry_。
    * @note 修改 binary_inflation_layer_。
    */
-  void addVirtualCeilingToInflatedOccupancy();
+  void addVirtualRollingCeilingToInflatedOccupancy();
 
   /**
    * @brief 接收点云输入并直接更新原始二值占据层和膨胀占据层。
    * @param current_point_cloud_message 输入点云消息，点坐标应与地图 frame 一致。
-   * @note 读取 mapping_parameters_.map_、mapping_parameters_.inflation_、mapping_parameters_.virtual_boundaries_、runtime_state_.sensor_pose_、
+   * @note 读取 mapping_parameters_.map_、mapping_parameters_.inflation_、mapping_parameters_.virtual_rolling_boundaries_、runtime_state_.sensor_pose_、
    * runtime_state_.mapping_status_ 和 voxel_grid_geometry_。
    * @note 修改 runtime_state_.mapping_status_、runtime_state_.local_bounds_、
    * raw_binary_occupancy_layer_、binary_inflation_layer_。
